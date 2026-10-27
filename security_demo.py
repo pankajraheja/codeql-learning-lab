@@ -6,7 +6,8 @@ app = Flask(__name__)
 
 @app.get("/lookup")
 def lookup():
-    customer = request.args.get("customer", "")
+        query = "SELECT status FROM orders WHERE customer = ?"
+        
 
     with sqlite3.connect(":memory:") as connection:
         connection.execute(
@@ -18,6 +19,6 @@ def lookup():
             f"WHERE customer = '{customer}'"
         )
 
-        rows = connection.execute(query).fetchall()
+        rows = connection.execute(query, (customer,)).fetchall()
 
     return {"orders": rows}
